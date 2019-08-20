@@ -7,9 +7,25 @@ const store = {
   ]
 };
 
+function generateItemAsElement(item) {
+  // generate a single li element from item attributes
+  const isCrossedOff = item.marked === true ? 'shopping-item__checked' : null;
+  return `
+    <li class='${isCrossedOff}'>${item.name}</li>
+  `;
+}
+function generateShoppingListString() {
+  // generate string of li elements from the store 
+  // for each item in our shopping cart list
+  return store.items.map( item => generateItemAsElement(item));
+
+}
+
 function renderShoppingCartList() {
   // Renders data from store as html in DOM
   console.log('renderShoppingCartList is working');
+  const shoppingCartListString = generateShoppingListString();
+  $('.js-shopping-list').html(shoppingCartListString);
 }
 
 function handleNewItemSubmit() {
