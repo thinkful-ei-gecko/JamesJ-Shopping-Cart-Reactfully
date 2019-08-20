@@ -1,3 +1,5 @@
+/* global cuid */
+
 'use strict';
 
 const store = {
@@ -54,13 +56,37 @@ function renderShoppingCartList() {
 function handleNewItemSubmit() {
   // Adds new item into store based on user input
   console.log('handleNewItemSubmit is working');
+  $('#js-shopping-list-form').on('submit', (e) => {
+    e.preventDefault();
+    const newItemName = $('.js-shopping-list-entry').val();
+    store.items.push({name: newItemName, marked: false});
+    $('.js-shopping-list-entry').val('');
+    renderShoppingCartList();
+
+  });
 }
 
+// toggle the marked status of an item in store
+function toggleMarkedForItem(itemId) {
+  const item = store.items.find(item => itemId === item.id);
+  item.marked = !item.marked;
+}
+
+// gets the data- value off of an element
+function getItemIdFromElement(item) {
+  return $(item)
+    .closest('li')
+    .data('item-id');
+}
 function handleItemCrossedOff() {
   // Updates state of an item to mark or unmark an item as crossed out
   // within the shopping cart list
   console.log('handleItemCrossedOff is working');
-
+  $('.js-shopping-list').on('click', '.js-item-toggle', (e) => {
+    const id = getItemIdFromElement(e.currentTarget);
+    toggleMarkedForItem(id);
+    renderShoppingCartList();
+  });
 }
 
 function handleItemDelete() {
