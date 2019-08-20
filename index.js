@@ -30,6 +30,14 @@ function generateItemAsElement(item) {
         <button class="shopping-item-delete js-item-delete">
             <span class="button-label">delete</span>
         </button>
+        <button class="shopping-item-edit js-item-edit">
+            <span class="button-label">edit</span>
+        </button>
+        <form id="js-edit-form" class="hidden">
+            <label for="shopping-list-entry">Edit item name:</label>
+            <input type="text" name="shopping-list-edit-entry" class="js-shopping-list-entry" placeholder="e.g., broccoli">
+            <button type="submit">Edit item</button>
+        </form>
       </div>
     </li>
   `;
