@@ -34,9 +34,9 @@ function generateItemAsElement(item) {
         <button class="shopping-item-edit js-item-edit">
             <span class="button-label">edit</span>
         </button>
-        <form id="js-edit-form" class="${isEditing}">
-            <label for="shopping-list-entry">Edit item name:</label>
-            <input type="text" name="shopping-list-edit-entry" class="js-shopping-list-entry" placeholder="e.g., broccoli">
+        <form class="js-edit-form ${isEditing}">
+            <label for="shopping-list-edit-entry">Edit item name:</label>
+            <input type="text" name="shopping-list-edit-entry" class="js-shopping-list-edit-entry" placeholder="e.g., broccoli">
             <button type="submit">Edit item</button>
         </form>
       </div>
@@ -59,13 +59,10 @@ function generateShoppingListString(shoppingList) {
 
 function renderShoppingCartList() {
   // Renders data from store as html in DOM
-  console.log('renderShoppingCartList is working');
   let filteredItems = store.items;
-  console.log('Should be unfilered:', filteredItems);
 
   if(store.hideMarked) {
     filteredItems = filteredItems.filter(item => !item.marked);
-    console.log('Should be filered now:', filteredItems);
   }
   const shoppingCartListString = generateShoppingListString(filteredItems);
   $('.js-shopping-list').html(shoppingCartListString);
@@ -75,11 +72,10 @@ function renderShoppingCartList() {
 
 function addNewItem(itemName) {
   store.items.push({id: cuid(), name: itemName, marked: false, editing: false});
-
 }
+
 function handleNewItemSubmit() {
   // Adds new item into store based on user input
-  console.log('handleNewItemSubmit is working');
   $('#js-shopping-list-form').on('submit', (e) => {
     e.preventDefault();
     const newItemName = $('.js-shopping-list-entry').val();
@@ -104,7 +100,6 @@ function getItemIdFromElement(item) {
 function handleItemCrossedOff() {
   // Updates state of an item to mark or unmark an item as crossed out
   // within the shopping cart list
-  console.log('handleItemCrossedOff is working');
   $('.js-shopping-list').on('click', '.js-item-toggle', (e) => {
     const id = getItemIdFromElement(e.currentTarget);
     toggleMarkedForItem(id);
@@ -121,10 +116,8 @@ function deleteItem(itemId) {
 
 // Handles click event for deleting a given item from list
 function handleItemDelete() {
-  console.log('handleItemDelete is working');
   $('.js-shopping-list').on('click', '.js-item-delete', (e) => {
     const id = getItemIdFromElement(e.currentTarget);
-    console.log(id);
     deleteItem(id);
     renderShoppingCartList();
   });
@@ -149,7 +142,6 @@ function toggleMarkedInView() {
 /**
  * Editing item
  * - toggle hidden class on click of edit button on an item
- * - display current name as placeholder
  * - upon adding new name into input and submitting, push change to store
  * - re-render list
  */
@@ -157,12 +149,27 @@ function toggleMarkedInView() {
 function toggleEditMode(itemId) {
   const item = store.items.find( item => itemId === item.id);
   item.editing = !item.editing;
-  renderShoppingCartList();
 }
+
 function toggleHiddenForElement() {
   $('.js-shopping-list').on('click', '.js-item-edit', (e) => {
     const id = getItemIdFromElement(e.currentTarget);
-    console.log(id);
+    toggleEditMode(id);
+    renderShoppingCartList();
+  });
+}
+
+function updateItemName(itemId, newName) {
+  const item = store.items.find( item => itemId === item.id);
+  item.name = newName;
+}
+
+function updateNameForElement() {
+  $('.js-shopping-list').on('submit', '.js-edit-form', (e) => {
+    e.preventDefault();
+    const id = getItemIdFromElement(e.currentTarget);
+    const newName = $('.js-shopping-list-edit-entry').val();
+    updateItemName(id, newName);
     toggleEditMode(id);
     renderShoppingCartList();
   });
@@ -176,6 +183,7 @@ function main() {
   handleItemDelete();
   toggleMarkedInView();
   toggleHiddenForElement();
+  updateNameForElement();
 }
 
 $(main);
