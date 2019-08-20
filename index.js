@@ -4,8 +4,8 @@
 
 const store = {
   items: [
-    { id: cuid(), name: 'banana', marked: true },
-    { id: cuid(), name: 'apple', marked: false }
+    { id: cuid(), name: 'banana', marked: true, editing: false },
+    { id: cuid(), name: 'apple', marked: false, editing: false }
   ],
   hideMarked: false
 };
@@ -18,6 +18,7 @@ const store = {
 function generateItemAsElement(item) {
   // generate a single li element from item attributes
   const isCrossedOff = item.marked === true ? 'shopping-item__checked' : null;
+  const isEditing = item.editing === true ? null : 'hidden';
   return `
     <li data-item-id="${item.id}"> 
       <span class="shopping-item js-shopping-item ${isCrossedOff}">
@@ -33,7 +34,7 @@ function generateItemAsElement(item) {
         <button class="shopping-item-edit js-item-edit">
             <span class="button-label">edit</span>
         </button>
-        <form id="js-edit-form" class="hidden">
+        <form id="js-edit-form" class="${isEditing}">
             <label for="shopping-list-entry">Edit item name:</label>
             <input type="text" name="shopping-list-edit-entry" class="js-shopping-list-entry" placeholder="e.g., broccoli">
             <button type="submit">Edit item</button>
@@ -73,7 +74,7 @@ function renderShoppingCartList() {
 // add an item to store
 
 function addNewItem(itemName) {
-  store.items.push({id: cuid(), name: itemName, marked: false});
+  store.items.push({id: cuid(), name: itemName, marked: false, editing: false});
 
 }
 function handleNewItemSubmit() {
@@ -145,6 +146,28 @@ function toggleMarkedInView() {
   });
 }
 
+/**
+ * Editing item
+ * - toggle hidden class on click of edit button on an item
+ * - display current name as placeholder
+ * - upon adding new name into input and submitting, push change to store
+ * - re-render list
+ */
+
+function toggleEditMode(itemId) {
+  const item = store.items.find( item => itemId === item.id);
+  item.editing = !item.editing;
+  renderShoppingCartList();
+}
+function toggleHiddenForElement() {
+  $('.js-shopping-list').on('click', '.js-item-edit', (e) => {
+    const id = getItemIdFromElement(e.currentTarget);
+    console.log(id);
+    toggleEditMode(id);
+    renderShoppingCartList();
+  });
+}
+
 function main() {
   // Invokes all functions for access in DOM/document ready
   renderShoppingCartList();
@@ -152,6 +175,7 @@ function main() {
   handleItemCrossedOff();
   handleItemDelete();
   toggleMarkedInView();
+  toggleHiddenForElement();
 }
 
 $(main);
