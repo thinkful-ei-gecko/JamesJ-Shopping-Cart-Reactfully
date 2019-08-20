@@ -1,0 +1,5 @@
+- [ ] As a user, I want to see a list of shopping cart items
+- [ ] As a user, I want to be able to add and remove items
+- [ ] As a user, I want to be able to cross off items on my list
+- [ ] As a user, I want to be able to edit item names
+- [ ] As a user, I want to be able to search existing items that are not crossed off of my list
