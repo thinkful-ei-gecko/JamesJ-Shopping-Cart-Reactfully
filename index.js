@@ -6,8 +6,10 @@ const store = {
   items: [
     { id: cuid(), name: 'banana', marked: true },
     { id: cuid(), name: 'apple', marked: false }
-  ]
+  ],
+  hideMarked: false
 };
+
 /**
  * 
  * @param {string} item -- one item from the shopping list
@@ -41,7 +43,7 @@ function generateItemAsElement(item) {
 function generateShoppingListString(shoppingList) {
   // generate string of li elements from the store 
   // for each item in our shopping cart list
-  const items = store.items.map( (item, index) => generateItemAsElement(item, index));
+  const items = shoppingList.map( (item, index) => generateItemAsElement(item, index));
   return items.join('');
 
 }
@@ -49,7 +51,14 @@ function generateShoppingListString(shoppingList) {
 function renderShoppingCartList() {
   // Renders data from store as html in DOM
   console.log('renderShoppingCartList is working');
-  const shoppingCartListString = generateShoppingListString();
+  let filteredItems = store.items;
+  console.log('Should be unfilered:', filteredItems);
+
+  if(store.hideMarked) {
+    filteredItems = filteredItems.filter(item => !item.marked);
+    console.log('Should be filered now:', filteredItems);
+  }
+  const shoppingCartListString = generateShoppingListString(filteredItems);
   $('.js-shopping-list').html(shoppingCartListString);
 }
 
@@ -113,12 +122,28 @@ function handleItemDelete() {
 
 }
 
+// toggle the store value for hideMarked
+
+function toggleMarkedFilter() {
+  store.hideMarked = !store.hideMarked;
+}
+
+// listen for event to apply filter to only show unmarked items
+
+function toggleMarkedInView() {
+  $('.js-hide-completed-toggle').on('click', () => {
+    toggleMarkedFilter();
+    renderShoppingCartList();
+  });
+}
+
 function main() {
   // Invokes all functions for access in DOM/document ready
   renderShoppingCartList();
   handleNewItemSubmit();
   handleItemCrossedOff();
   handleItemDelete();
+  toggleMarkedInView();
 }
 
 $(main);
