@@ -19,6 +19,17 @@ function generateItemAsElement(item) {
   // generate a single li element from item attributes
   const isCrossedOff = item.marked === true ? 'shopping-item__checked' : null;
   const isEditing = item.editing === true ? null : 'hidden';
+  let itemEditor = 
+    `<form class="js-edit-form ${isEditing}">
+      <label for="shopping-list-edit-entry">Edit item name:</label>
+      <input type="text" name="shopping-list-edit-entry" class="js-shopping-list-edit-entry" placeholder="e.g., broccoli">
+      <button type="submit">Edit item</button>
+    </form>`;
+  if(isEditing) {
+    itemEditor = '';
+  }
+   
+
   return `
     <li data-item-id="${item.id}"> 
       <span class="shopping-item js-shopping-item ${isCrossedOff}">
@@ -34,11 +45,7 @@ function generateItemAsElement(item) {
         <button class="shopping-item-edit js-item-edit">
             <span class="button-label">edit</span>
         </button>
-        <form class="js-edit-form ${isEditing}">
-            <label for="shopping-list-edit-entry">Edit item name:</label>
-            <input type="text" name="shopping-list-edit-entry" class="js-shopping-list-edit-entry" placeholder="e.g., broccoli">
-            <button type="submit">Edit item</button>
-        </form>
+        ${itemEditor}
       </div>
     </li>
   `;
