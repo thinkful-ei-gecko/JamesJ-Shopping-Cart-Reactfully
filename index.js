@@ -2,22 +2,45 @@
 
 const store = {
   items: [
-    { name: 'banana', marked: true },
-    { name: 'apple', marked: false }
+    { id: cuid(), name: 'banana', marked: true },
+    { id: cuid(), name: 'apple', marked: false }
   ]
 };
+/**
+ * 
+ * @param {string} item -- one item from the shopping list
+ */
 
 function generateItemAsElement(item) {
   // generate a single li element from item attributes
   const isCrossedOff = item.marked === true ? 'shopping-item__checked' : null;
   return `
-    <li class='${isCrossedOff}'>${item.name}</li>
+    <li data-item-id="${item.id}"> 
+      <span class="shopping-item js-shopping-item ${isCrossedOff}">
+      ${item.name}
+      </span>
+      <div class="shopping-item-controls">
+        <button class="shopping-item-toggle js-item-toggle">
+            <span class="button-label">check</span>
+        </button>
+        <button class="shopping-item-delete js-item-delete">
+            <span class="button-label">delete</span>
+        </button>
+      </div>
+    </li>
   `;
 }
-function generateShoppingListString() {
+
+/**
+ * 
+ * @param {array} shoppingList -- array of items from store
+ */
+
+function generateShoppingListString(shoppingList) {
   // generate string of li elements from the store 
   // for each item in our shopping cart list
-  return store.items.map( item => generateItemAsElement(item));
+  const items = store.items.map( (item, index) => generateItemAsElement(item, index));
+  return items.join('');
 
 }
 
