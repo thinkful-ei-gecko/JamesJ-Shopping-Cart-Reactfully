@@ -53,16 +53,21 @@ function renderShoppingCartList() {
   $('.js-shopping-list').html(shoppingCartListString);
 }
 
+// add an item to store
+
+function addNewItem(itemName) {
+  store.items.push({id: cuid(), name: itemName, marked: false});
+
+}
 function handleNewItemSubmit() {
   // Adds new item into store based on user input
   console.log('handleNewItemSubmit is working');
   $('#js-shopping-list-form').on('submit', (e) => {
     e.preventDefault();
     const newItemName = $('.js-shopping-list-entry').val();
-    store.items.push({name: newItemName, marked: false});
+    addNewItem(newItemName);
     $('.js-shopping-list-entry').val('');
     renderShoppingCartList();
-
   });
 }
 
@@ -100,7 +105,6 @@ function main() {
   renderShoppingCartList();
   handleNewItemSubmit();
   handleItemCrossedOff();
-  handleItemDelete();
   handleItemDelete();
 }
 
