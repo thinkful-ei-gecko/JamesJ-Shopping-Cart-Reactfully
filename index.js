@@ -1,5 +1,12 @@
 'use strict';
- 
+
+const store = {
+  items: [
+    { name: 'banana', marked: true },
+    { name: 'apple', marked: false }
+  ]
+};
+
 function renderShoppingCartList() {
   // Renders data from store as html in DOM
   console.log('renderShoppingCartList is working');
@@ -24,7 +31,7 @@ function handleItemDelete() {
 }
 
 function main() {
-  // Invokes all functions for access in DOM
+  // Invokes all functions for access in DOM/document ready
   renderShoppingCartList();
   handleNewItemSubmit();
   handleItemCrossedOff();
