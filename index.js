@@ -94,9 +94,22 @@ function handleItemCrossedOff() {
   });
 }
 
+// delete on item from store by id
+function deleteItem(itemId) {
+  const filteredStore = store.items.filter( item => itemId !== item.id);
+  store.items = filteredStore;
+  renderShoppingCartList();
+}
+
+// Handles click event for deleting a given item from list
 function handleItemDelete() {
-  // Updates store to remove item from shopping cart 
   console.log('handleItemDelete is working');
+  $('.js-shopping-list').on('click', '.js-item-delete', (e) => {
+    const id = getItemIdFromElement(e.currentTarget);
+    console.log(id);
+    deleteItem(id);
+    renderShoppingCartList();
+  });
 
 }
 
