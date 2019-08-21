@@ -7,7 +7,8 @@ const store = {
     { id: cuid(), name: 'banana', marked: true, editing: false },
     { id: cuid(), name: 'apple', marked: false, editing: false }
   ],
-  hideMarked: false
+  hideMarked: false,
+  searchFilter: ''
 };
 
 /**
@@ -70,6 +71,10 @@ function renderShoppingCartList() {
 
   if(store.hideMarked) {
     filteredItems = filteredItems.filter(item => !item.marked);
+  }
+
+  if(store.searchFilter && store.searchFilter !== '') {
+    filteredItems = filteredItems.filter(item => item.name.includes(store.searchFilter));
   }
   const shoppingCartListString = generateShoppingListString(filteredItems);
   $('.js-shopping-list').html(shoppingCartListString);
@@ -182,6 +187,26 @@ function updateNameForElement() {
   });
 }
 
+/**
+ * when entering data into search bar
+ * for each letter pressed, render array where letters typed
+ * match the name of an item
+ */
+
+function updateSearchValue(term) {
+  store.searchFilter = term;
+  console.log(store.searchFilter = term);
+}
+
+function filterListBySearch() {
+  $('#search').keyup(() => {
+    let searchString = $('.js-search').val();
+    updateSearchValue(searchString);
+    renderShoppingCartList();
+  });
+}
+
+
 function main() {
   // Invokes all functions for access in DOM/document ready
   renderShoppingCartList();
@@ -191,6 +216,7 @@ function main() {
   toggleMarkedInView();
   toggleHiddenForElement();
   updateNameForElement();
+  filterListBySearch();
 }
 
 $(main);
