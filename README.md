@@ -5,4 +5,4 @@
 # Extension Requirements
 - [x] As a user, I want to be able to edit item names
 - [x] As a user, I want to be able to toggle for items that are not crossed off of my list
-- [ ] As a user, I want to be able to search only for specific items matching by name
+- [x] As a user, I want to be able to search only for specific items matching by name
