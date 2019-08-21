@@ -160,7 +160,9 @@ function toggleMarkedInView() {
 
 function toggleEditMode(itemId) {
   const item = store.items.find( item => itemId === item.id);
+  const otherItems = store.items.filter( item => itemId !== item.id );
   item.editing = !item.editing;
+  otherItems.forEach(item => item.editing = false);
 }
 
 function toggleHiddenForElement() {
