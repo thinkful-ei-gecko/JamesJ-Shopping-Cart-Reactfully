@@ -195,7 +195,6 @@ function updateNameForElement() {
 
 function updateSearchValue(term) {
   store.searchFilter = term;
-  console.log(store.searchFilter = term);
 }
 
 function filterListBySearch() {
